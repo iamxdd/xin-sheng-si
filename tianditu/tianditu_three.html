@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		TEvent.addListener(polygonMask, "mouseover", function() {
+			clearTimeout(inforboxTimeout);
+			curStationName = null;
+			$("#infoBox-wrapper").hide();
+			});
+
+			var mousedragNum = 0;
+			TEvent.addListener(polygonMask, "click", function() {
+				if(mousedragNum < 3) {
+					map.panTo(centerDefault);
+					for(var i = 0; i < polygons.size(); i++) {
+						polygons.get(polygons.keys[i]).setStrokeColor("white");
+						polygons.get(polygons.keys[i]).setStrokeWeight(2);
+					}
+					// 默认选中市区
+					map.removeOverLay(polygons.get(boundary.keys[1]));
+					polygons.get(boundary.keys[1]).setStrokeColor("#268cea");
+					polygons.get(boundary.keys[1]).setStrokeWeight(2);
+					map.addOverLay(polygons.get(boundary.keys[1]));
+					curCityName = boundary.keys[1];
+				}
+				mousedragNum = 0;
+			});
+			TEvent.addListener(map, "mousedrag", function() {
+				mousedragNum++;
+			});
+			map.addOverLay(polygonMask);
+		} else {
+			var polygon = boundary.pointsToTPolygon(data);
+			polygon.setStrokeOpacity(1);
+			polygon.setStrokeColor("white");
+			polygon.setStrokeWeight(2);
+			polygon.setFillOpacity(0);
+
+			TEvent.addListener(polygon, "click", function(e) {
+				curStationName = null;
+				clearTimeout(inforboxTimeout);
+				$("#infoBox-wrapper").hide();
+				for(var i = 0; i < polygons.size(); i++) {
+					if(polygons.get(polygons.keys[i]) == this) {
+						if(polygons.keys[i] == curCityName) {
+							return;
+						}
+						curCityName = polygons.keys[i];
+					}
+					polygons.get(polygons.keys[i]).setStrokeColor("white");
+					polygons.get(polygons.keys[i]).setStrokeWeight(2);
+				}
+
+				map.removeOverLay(this);
+				this.setStrokeColor("#268cea");
+				this.setStrokeWeight(2);
+				map.addOverLay(this);
+
+				var _x_table = ($("#wrapper").width() - $("#main").width()) / 2 + $("#main-right").width();
+
+				$("#main-right").stop().stop().animate({
+					"left": _x_table
+				}, {
+					duration: 800,
+					easing: "easeInBack",
+					complete: function() {
+						updateTable();
+					}
+				}).animate({
+					"left": 0
+				}, {
+					duration: 1300,
+					easing: "easeOutCirc"
+				});
+	</script>
+</body>
+</html>

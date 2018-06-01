@@ -1,0 +1,35 @@
+.squared-panel {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    border-bottom: 1px solid #CCCCCC;
+    .squared-item {
+        border-top: 1px solid #CCCCCC;
+        width: calc(~'100% / 3 - 1px');
+        text-align: center;
+        .iconfont {
+            margin-bottom: .5rem;
+            font-size: 2rem;
+            display: inline-block;
+        }
+    }
+    .squared-link {
+        padding: 2rem 0;
+        display: block;
+        color: #363636;
+        text-decoration: none;
+    }
+    .squared-item:not(:nth-child(3n)) {
+        border-right: 1px solid #CCCCCC;
+    }
+}
+
+.flexbox {
+    display: flex;
+    .flex1 {
+        flex: 1;
+    }
+}
+
+.text-center{
+    text-align: center;
+}
